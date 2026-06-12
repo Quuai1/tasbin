@@ -18,12 +18,12 @@
   "lang": "ar",
   "display_override": [
     "fullscreen",
-    "window-controls-overlay",
-    "browser",
     "standalone",
-    "minimal-ui"
+    "window-controls-overlay"
   ],
   "categories": [
     "lifestyle"
-  ]
+  ],
+  "dir": "rtl",
+  "prefer_related_applications": false
 }
