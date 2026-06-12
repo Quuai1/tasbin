@@ -541,63 +541,6 @@
     </script>
 
     <!-- PWA + Service Worker للتشغيل بدون إنترنت -->
-    <script>
-        (function() {
-            // إضافة وصف للتطبيق داخل البيان (Manifest) لتفادي تحذير PWABuilder
-            const manifest = {
-                name: 'المسبحة الإلكترونية',
-                short_name: 'المسبحة',
-                description: 'مسبحة إلكترونية متكاملة للتسبيح والذكر مع أوارد متعددة وإحصائيات',
-                start_url: '.',
-                display: 'standalone',
-                background_color: '#fdf8f0',
-                theme_color: '#1a6b5a',
-                orientation: 'portrait',
-                icons: [{
-                    src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="#1a6b5a"/><text x="96" y="130" text-anchor="middle" font-size="100" fill="white">☾</text></svg>'),
-                    sizes: '192x192',
-                    type: 'image/svg+xml',
-                    purpose: 'any maskable'
-                }]
-            };
-            const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-            const manifestURL = URL.createObjectURL(manifestBlob);
-            const link = document.createElement('link');
-            link.rel = 'manifest';
-            link.href = manifestURL;
-            document.head.appendChild(link);
-
-            // Service Worker للتخزين الكامل (Offline)
-            if ('serviceWorker' in navigator) {
-                const swCode = `
-                    const CACHE_NAME = 'tasbih-v3';
-                    const urlsToCache = [ self.location.href ];
-                    self.addEventListener('install', event => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)).then(() => self.skipWaiting())
-                        );
-                    });
-                    self.addEventListener('fetch', event => {
-                        event.respondWith(
-                            caches.match(event.request).then(response => response || fetch(event.request))
-                        );
-                    });
-                    self.addEventListener('activate', event => {
-                        event.waitUntil(
-                            caches.keys().then(cacheNames => {
-                                return Promise.all(
-                                    cacheNames.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
-                                );
-                            })
-                        );
-                    });
-                `;
-                const swBlob = new Blob([swCode], { type: 'text/javascript' });
-                navigator.serviceWorker.register(URL.createObjectURL(swBlob))
-                    .then(() => console.log('✅ تطبيق يعمل بدون إنترنت'))
-                    .catch(err => console.log('⚠️ SW:', err));
-            }
-        })();
-    </script>
+    <link rel="manifest" href="manifest.webmanifest">
 </body>
 </html>
